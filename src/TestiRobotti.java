@@ -133,7 +133,10 @@ public class TestiRobotti extends Robotti {
 				if(naapuritPisteessa(seuraava).contains(mahdNaapuri) && 
 					histamiini.lastIndexOf(mahdNaapuri) + 1 < histamiini.lastIndexOf(seuraava)  ) {
 					//poista
-					iteraattori.remove();
+					//iteraattori.remove();
+					for(int i = histamiini.lastIndexOf(mahdNaapuri) + 1; i < histamiini.lastIndexOf(seuraava); i++){
+						histamiini.remove(i);
+					}
 					//List<Point> loppu = histamiini.subList(histamiini.lastIndexOf(seuraava), histamiini.lastIndexOf(histamiini.peekLast()));
 					//histamiini = new LinkedList<Point>( histamiini.subList(0, histamiini.lastIndexOf(mahdNaapuri)) );
 					//histamiini.addAll(loppu); //kai näinpäin?
