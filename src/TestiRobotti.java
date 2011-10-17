@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Random;
 
 public class TestiRobotti extends Robotti {
 	
@@ -132,12 +130,17 @@ public class TestiRobotti extends Robotti {
 		Point seuraava = iteraattori.next();
 		while(jokaSuuntaanOllaanMenty( seuraava ) && iteraattori.hasNext()) {
 			for(Point mahdNaapuri : histamiini) {
-				if(naapuritPisteessa(iteraattori.).equals(mahdNaapuri)) ) {
-						//poista 
+				if(naapuritPisteessa(seuraava).contains(mahdNaapuri) && 
+						histamiini.lastIndexOf(mahdNaapuri) < histamiini.lastIndexOf(seuraava)  ) {
+					//poista
+					List<Point> loppu = histamiini.subList(histamiini.lastIndexOf(seuraava), histamiini.lastIndexOf(histamiini.peekLast()));
+					histamiini = (LinkedList<Point>) histamiini.subList(0, histamiini.lastIndexOf(mahdNaapuri));
+					histamiini.addAll(loppu); //kai näinpäin?
 				}
 			}
 			seuraava = iteraattori.next();
 		}
+		this.historia = histamiini;
 	}
 	
 	List<Point> naapuritPisteessa(Point piste) {
