@@ -253,9 +253,11 @@ public class TestiRobotti extends Robotti {
 	}
     
     /*
-  private void optiomoiHistoriaa() {
+    private void optiomoiHistoriaa() {
 		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
 		Iterator<Point> itr = histamiini.descendingIterator();
+		itr.next();
+		itr.remove();
 		while (itr.hasNext()) {
 			Point arvo = itr.next();
 			for (Point mahdNaapuri : histamiini) {
@@ -263,6 +265,7 @@ public class TestiRobotti extends Robotti {
 					break;
 				}
 			}
+			System.out.println(arvo);
 			itr.remove();
 	}
 		if (histamiini.size() != 0) {
