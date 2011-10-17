@@ -104,8 +104,8 @@ public class TestiRobotti extends Robotti {
     		}
     		
     		parasSuunta = suuntaNaapuriin(nykyinenSijainti, viimeSijainti);
-    		//System.out.println("**** Ollaan menty jo joka suuntaan, paras suunta nyt olisi: " + parasSuunta + ", jotta päästään takaisin ruutuun: " + viimeSijainti);
-    		//System.out.println("Nyky: " + this.nykyinenSijainti + ", viime: " + viimeSijainti);
+    		System.out.println("**** Ollaan menty jo joka suuntaan, paras suunta nyt olisi: " + parasSuunta + ", jotta päästään takaisin ruutuun: " + viimeSijainti);
+    		System.out.println("Nyky: " + this.nykyinenSijainti + ", viime: " + viimeSijainti);
     		return parasSuunta;
     	}
     	
@@ -131,11 +131,12 @@ public class TestiRobotti extends Robotti {
 		while(jokaSuuntaanOllaanMenty( seuraava ) && iteraattori.hasNext()) {
 			for(Point mahdNaapuri : histamiini) {
 				if(naapuritPisteessa(seuraava).contains(mahdNaapuri) && 
-						histamiini.lastIndexOf(mahdNaapuri) < histamiini.lastIndexOf(seuraava)  ) {
+					histamiini.lastIndexOf(mahdNaapuri) + 1 < histamiini.lastIndexOf(seuraava)  ) {
 					//poista
-					List<Point> loppu = histamiini.subList(histamiini.lastIndexOf(seuraava), histamiini.lastIndexOf(histamiini.peekLast()));
-					histamiini = (LinkedList<Point>) histamiini.subList(0, histamiini.lastIndexOf(mahdNaapuri));
-					histamiini.addAll(loppu); //kai näinpäin?
+					iteraattori.remove();
+					//List<Point> loppu = histamiini.subList(histamiini.lastIndexOf(seuraava), histamiini.lastIndexOf(histamiini.peekLast()));
+					//histamiini = new LinkedList<Point>( histamiini.subList(0, histamiini.lastIndexOf(mahdNaapuri)) );
+					//histamiini.addAll(loppu); //kai näinpäin?
 				}
 			}
 			seuraava = iteraattori.next();
