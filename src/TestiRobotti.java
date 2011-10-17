@@ -87,7 +87,7 @@ public class TestiRobotti extends Robotti {
 	        	if( !kaynytSuunnassa(suunta) ){
 	        		parasSuunta = suunta;
 	        		parasSuuntaKertaa = 0;
-	        	} else if ( this.labynTiedot.get( suuntaSijainti )[4] < parasSuuntaKertaa ){
+	        	} else if ( this.labynTiedot.get( suuntaSijainti )[4] <= parasSuuntaKertaa ){
 	        		parasSuunta = suunta;
 	        		parasSuuntaKertaa = this.labynTiedot.get( sijaintiSuunnassa(this.nykyinenSijainti, parasSuunta) )[4];
 	        	}
