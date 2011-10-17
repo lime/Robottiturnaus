@@ -249,6 +249,24 @@ public class TestiRobotti extends Robotti {
 		Turnaus.main(args);
 	}
     
+    /*
+    private void optiomoiHistoriaa() {
+		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
+		Iterator<Point> itr = histamiini.descendingIterator();
+		while (itr.hasNext()) {
+			Point arvo = itr.next();
+			for (Point mahdNaapuri : histamiini) {
+				if (arvo.equals(mahdNaapuri)) {
+					break;
+				}
+			}
+			itr.remove();
+	}
+		this.historia = new ArrayDeque<Point>(histamiini);
+	}
+    
+    
+    
     /*boolean seinaOikealla() {
         kaannyOikealle(); 
         boolean palaute = !this.voiEdeta();
