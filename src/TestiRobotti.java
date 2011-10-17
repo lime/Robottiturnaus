@@ -128,17 +128,16 @@ public class TestiRobotti extends Robotti {
 
 	private void optiomoiHistoriaa() {
 		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
-		Iterator<Point> iteraattori = histamiini.descendingIterator();
-		while(jokaSuuntaanOllaanMenty( iteraattori.next() ) && iteraattori.hasNext()) {
+		Iterator<Point> iteraattori = histamiini.descendingIterator(); //iteraattori joka menee lopusta alkuun
+		Point seuraava = iteraattori.next();
+		while(jokaSuuntaanOllaanMenty( seuraava ) && iteraattori.hasNext()) {
 			for(Point mahdNaapuri : histamiini) {
-				for(int suunta = 0; suunta < 4; suunta++) {
-					if(sijaintiSuunnassa(mahdNaapuri,suunta).equals(iteraattori) ) {
-						//XXX
-					}
+				if(naapuritPisteessa(iteraattori.).equals(mahdNaapuri)) ) {
+						//poista 
 				}
 			}
+			seuraava = iteraattori.next();
 		}
-		iteraattori.next();
 	}
 	
 	List<Point> naapuritPisteessa(Point piste) {
