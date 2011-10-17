@@ -268,7 +268,7 @@ public class TestiRobotti extends Robotti {
 		if (histamiini.size() != 0) {
 			this.historia = new ArrayDeque<Point>(histamiini);
 	}
-    
+  }
     
     /*boolean seinaOikealla() {
         kaannyOikealle(); 
