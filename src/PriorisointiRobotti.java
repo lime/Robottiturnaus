@@ -1,18 +1,17 @@
 import java.awt.Point;
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-public class TestiRobotti extends Robotti {
+public class PriorisointiRobotti extends Robotti {
 	
+    private Random RAND;
     private Map<Point,int[]> labynTiedot;
     private Point nykyinenSijainti;
-    private int[] etenemisVaihtoehdot;
-    private boolean tullaanUmpikujasta;
-    private ArrayDeque<Point> historia;
+    private int[] etenemisVaihtoehdot = new int[5];
+    private boolean tullaanUmpikujasta = false;
     
     @Override
     public void teeSiirto() {
@@ -24,22 +23,14 @@ public class TestiRobotti extends Robotti {
         this.kaannySuuntaan(uusiSuunta);
         this.uusiSijainti(uusiSuunta);
         
-        /*Point viimeVapaa = this.viimeVapaaRisteys();
-        if ( !this.nykyinenSijainti.equals(viimeVapaa) ) {
-        	System.out.println("viimeisin vapaa risteys: "+viimeVapaa);
-        }*/
-        
-        //System.out.println(this.labynTiedot);
+        System.out.println(this.labynTiedot);
         this.etene();
     }
     
-    public TestiRobotti() {
+    public PriorisointiRobotti() {
         super();
         this.nykyinenSijainti = new Point();
         this.labynTiedot = new HashMap<Point, int[]>();
-        this.etenemisVaihtoehdot = new int[5];
-        this.tullaanUmpikujasta = false;
-        this.historia = new ArrayDeque<Point>();
     }
     
     public void tallennaTiedot() {
@@ -58,8 +49,7 @@ public class TestiRobotti extends Robotti {
 			}
 		}
 		
-		
-		if(this.tullaanUmpikujasta){
+		if(tullaanUmpikujasta){
 			//vastakkaiseen ei sitten mennä takas >:3
 			this.etenemisVaihtoehdot[(this.annaSuunta()+2) % 4] = 0;
 		}
@@ -70,7 +60,7 @@ public class TestiRobotti extends Robotti {
 				vaihtoehtoja++;
 			}
 		}
-		this.tullaanUmpikujasta = vaihtoehtoja > 1 ? false : true;
+		tullaanUmpikujasta = vaihtoehtoja > 1 ? false : true;
 
 	    
 	    if (this.labynTiedot.containsKey(this.nykyinenSijainti)) {
@@ -81,8 +71,6 @@ public class TestiRobotti extends Robotti {
 	    }
 	    /* .clone(), muuten koko labynTiedot sisältää kaikissa pisteissä saman Pointin */
 	    this.labynTiedot.put((Point) this.nykyinenSijainti.clone(),this.etenemisVaihtoehdot.clone());
-	    
-	    this.historia.addLast((Point) this.nykyinenSijainti.clone()); //historiaan lisätään että täällä käytiin
 	}
 
 	private int paataSuunta() {
@@ -90,25 +78,13 @@ public class TestiRobotti extends Robotti {
 		 * ideana siis: 
 		 */
 		//FIXME liian sekavaa :(
-		int parasSuunta = Arrays.asList(this.etenemisVaihtoehdot).indexOf(1); //eka vaan joku jonne voi mennä
+		int parasSuunta = Arrays.asList(this.etenemisVaihtoehdot).indexOf(1); 
 		int parasSuuntaKertaa = Integer.MAX_VALUE;
-		
-    	if(jokaSuuntaanOllaanMenty(this.nykyinenSijainti) && historia.peekLast() != null) {
-			Point viimeSijainti = historia.pollLast();
-    		while(viimeSijainti.equals(this.nykyinenSijainti) && historia.peekLast() != null) {
-    			viimeSijainti = historia.pollLast(); //ettei ole nykyinen -hotfix
-    		}
-    		
-    		parasSuunta = suuntaNaapuriin(nykyinenSijainti, viimeSijainti);
-    		System.out.println("**** Ollaan menty jo joka suuntaan, paras suunta nyt olisi: " + parasSuunta + ", jotta päästään takaisin ruutuun: " + viimeSijainti);
-    		System.out.println("Nyky: " + this.nykyinenSijainti + ", viime: " + viimeSijainti);
-    		return parasSuunta;
-    	}
-    	
 	    for(int suunta = 0; suunta < 4; suunta++) {
-	        if (this.etenemisVaihtoehdot[suunta] == 1) { //ei ole seinää
+	        if (this.etenemisVaihtoehdot[suunta] == 1) {
+	        	//ei ole seinää
 	        	Point suuntaSijainti = sijaintiSuunnassa(nykyinenSijainti,suunta);
-	        	if( !kaynytSuunnassa(this.nykyinenSijainti,suunta) ){
+	        	if( !kaynytSuunnassa(suunta) ){
 	        		parasSuunta = suunta;
 	        		parasSuuntaKertaa = 0;
 	        	} else if ( this.labynTiedot.get( suuntaSijainti )[4] <= parasSuuntaKertaa ){
@@ -139,9 +115,9 @@ public class TestiRobotti extends Robotti {
     	return pal;
     }
     
-    public boolean kaynytSuunnassa(Point sijainti, int suunta) {
-        Point suuntaSijainti = sijaintiSuunnassa(sijainti, suunta);
-        	//System.out.println(suuntaSijainti);//FIXME
+    public boolean kaynytSuunnassa(int suunta) {
+        Point suuntaSijainti = sijaintiSuunnassa(this.nykyinenSijainti, suunta);
+        	System.out.println(suuntaSijainti);//FIXME
 
         if (this.labynTiedot.containsKey(suuntaSijainti)) {
             return true;
@@ -150,56 +126,6 @@ public class TestiRobotti extends Robotti {
             return false;
         }
     }
-    
-    public Point viimeVapaaRisteys() {
-    	boolean loytyiVapaaRisteys = false;
-    	while(!loytyiVapaaRisteys) {
-    		Point sijainti = historia.pollLast();
-    		
-    		while(sijainti == this.nykyinenSijainti) {
-    			sijainti = historia.pollLast(); //ettei ole nykyinen -hotfix
-    		}
-    		for(int suunta = 0; suunta < 4; suunta++) {
-    			if(this.labynTiedot.containsKey(sijainti) ) {
-    				//FIXME debuugausta
-	    			if(this.labynTiedot.get(sijainti)[suunta] == 1 && !this.kaynytSuunnassa(sijainti, suunta)) {
-	    				System.out.println("Nykyinen sijainti: "+this.nykyinenSijainti);
-	    				System.out.println("Sijainnista " + sijainti + " ollaan käyty suunnassa " + suunta + ": " + this.kaynytSuunnassa(sijainti, suunta));
-	    				loytyiVapaaRisteys = true;
-	    				return sijainti;
-	    			}
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
-    /*void liikuTakaisinUuteenRisteykseen() {
-    	if(jokaSuuntaanOllaanMenty(this.nykyinenSijainti)) {
-    		suunta = historia.pollLast();
-    	}
-    }*/
-    
-    int suuntaNaapuriin(Point nykyinen, Point naapuri) {
-    	for(int i = 0; i < 4; i++) {
-    		if (sijaintiSuunnassa(nykyinen,i).equals(naapuri) ) {
-    			return i;
-    		}
-    	}
-    	System.err.println(nykyinen + " ja " + naapuri + " eivät ole naapureita.");
-    	return -1;
-    }
-    
-    boolean jokaSuuntaanOllaanMenty(Point sijainti) {
-    	for(int suunta = 0; suunta < 4; suunta++) {
-    		if(!kaynytSuunnassa(sijainti, suunta) && this.labynTiedot.get(sijainti)[suunta] == 1) {
-    			return false;
-    		}
-    	}
-    	return true;
-    }
-    
-    
     
     //TODO Henrin umpikuja-sääntö eli jos läydetään umpikuja poistetaan se suunta vaihtoehtoista!
     
