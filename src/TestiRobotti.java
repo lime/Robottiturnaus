@@ -2,14 +2,15 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 
 public class TestiRobotti extends Robotti {
 	
     private Random RAND;
-    private Map<Point,Boolean[]> labynTiedot;
+    private Map<Point,int[]> labynTiedot;
     private Point nykyinenSijainti;
-    private Boolean[] etenemisVaihtoehdot = new Boolean[4];
+    private int[] etenemisVaihtoehdot = new int[5];
     
     @Override
     public void teeSiirto() {
@@ -28,7 +29,7 @@ public class TestiRobotti extends Robotti {
     public TestiRobotti() {
         super();
         this.nykyinenSijainti = new Point();
-        this.labynTiedot = new HashMap<Point, Boolean[]>();
+        this.labynTiedot = new HashMap<Point, int[]>();
     }
     
     public void uusiSijainti(int suunta) {
@@ -55,20 +56,32 @@ public class TestiRobotti extends Robotti {
          * olevaan suuntaan edetä
         */
         for (int t=0; t < 4; t++) {
-        	this.etenemisVaihtoehdot[this.annaSuunta()] = this.voiEdeta();
+        	// 1 tai 0, ei boolean enää
+        	this.etenemisVaihtoehdot[this.annaSuunta()] = this.voiEdeta() ? 1 : 0;
         	//lyhyt versio ;)
             this.kaannyVasemmalle();
+        }
+        if (this.labynTiedot.containsKey(this.nykyinenSijainti)) {
+        	//tosi sekavaa, mutta tallentaa montako kertaa ollaan käyty tässä ruudussa
+        	this.etenemisVaihtoehdot[4] = this.labynTiedot.get(this.nykyinenSijainti)[4] + 1;
+        } else {
+        	this.etenemisVaihtoehdot[4] = 1;
         }
         /* .clone(), muuten koko labynTiedot sisältää kaikissa pisteissä saman Pointin */
         this.labynTiedot.put((Point) this.nykyinenSijainti.clone(),this.etenemisVaihtoehdot.clone());
     }
     
     private int paataSuunta() {
+    	//FIXME liian sekavaa :(
+    	int parasSuunta, parasSuuntaKertaa;
         for(int suunta = 0; suunta < 4; suunta++) {
-            this.kaannySuuntaan(suunta); //FIXME vai pitääkö aloittaa nykyisestä
-            if (this.voiEdeta() && !this.kaynytSuunnassa(suunta)) {
-                //ei ole seinää eikä olla käyty siellä
-               //FIXME sysysSystem.out.println("Suunta: "+suunta+". Voi edetä: "+this.voiEdeta()+". on käynyt suunnassa: "+this.kaynytSuunnassa(suunta));
+            if (this.etenemisVaihtoehdot[suunta] == 1) {
+            	//ei ole seinää
+            	if( this.labynTiedot.get( sijaintiSuunnassa(this.nykyinenSijainti, suunta) )[4] < parasSuuntaKertaa ){
+            		parasSuunta = sijaintiSuunnassa(this.nykyinenSijainti, suunta);
+            		parasSuuntaKertaa = this.labyTiedot.get( parasSuunta[0] )[4];
+            	}
+            	//FIXME System.out.println("Suunta: "+suunta+". Voi edetä: "+this.voiEdeta()+". on käynyt suunnassa: "+this.kaynytSuunnassa(suunta));
                 return suunta;
             }
         }
@@ -89,6 +102,8 @@ public class TestiRobotti extends Robotti {
             return false;
         }
     }
+    
+    //TODO Henrin umpikuja-sääntö eli jos läydetään umpikuja poistetaan se suunta vaihtoehtoista!
     
     private void kaannySuuntaan(int suunta) {
         while(this.annaSuunta() != suunta) {
@@ -122,6 +137,21 @@ public class TestiRobotti extends Robotti {
             this.kaannyVasemmalle();
         }
             return this.annaSuunta();
+    }*/
+    
+    /* Liikkuu ihan ok, mutta jumittuu, pitäisi lisätä että 
+     * seuraa seinää tai valitsee sen suunnan jossa on käynyt vähemmän.
+     */
+    /*private int paataSuunta_version2() {
+        for(int suunta = 0; suunta < 4; suunta++) {
+            this.kaannySuuntaan(suunta); //FIXME vai pitääkö aloittaa nykyisestä
+            if (this.voiEdeta() && !this.kaynytSuunnassa(suunta)) {
+                //ei ole seinää eikä olla käyty siellä
+                return suunta;
+            }
+        }
+        return Arrays.asList(this.etenemisVaihtoehdot).indexOf(true);
+        //antaa ensimmäisen mahdollisen vaihtoehdon
     }*/
     
 }
