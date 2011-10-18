@@ -253,26 +253,34 @@ public class TestiRobotti extends Robotti {
 	}
     
     /*
-    private void optiomoiHistoriaa() {
-		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
-		Iterator<Point> itr = histamiini.descendingIterator();
-		itr.next();
-		itr.remove();
+public void optiomoiHistoriaa() {
+		int leikkauspiste=-1;
+    	LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
+		LinkedList<Point> reitti = new LinkedList<Point>();
+    	Iterator<Point> itr = histamiini.descendingIterator();
 		while (itr.hasNext()) {
 			Point arvo = itr.next();
-			for (Point mahdNaapuri : histamiini) {
-				if (arvo.equals(mahdNaapuri)) {
-					break;
+			if (naapuritPisteessa(this.nykyinenSijainti).contains(arvo)) {
+				//System.out.println("Size of histamiini: " + histamiini.size());
+				//System.out.println("Index of: " + histamiini.indexOf(arvo));
+				if (histamiini.indexOf(arvo) != (histamiini.size() - 2)) {
+					leikkauspiste = histamiini.indexOf(arvo);
 				}
+			}	
+		}
+		int x = 0;
+		System.out.println("Leikkauspiste luotu kohtaan:" + leikkauspiste);
+		if (leikkauspiste != -1) {
+			while (x <= leikkauspiste) {
+				reitti.add(x,histamiini.get(x));
+				System.out.println(x);
+				x++;
 			}
-			System.out.println(arvo);
-			itr.remove();
-	}
-		if (histamiini.size() != 0) {
-			this.historia = new ArrayDeque<Point>(histamiini);
-	}
-  }
-    
+			reitti.addLast(histamiini.getLast());
+		this.historia = new ArrayDeque<Point>(reitti);
+		}
+    }
+    */
     /*boolean seinaOikealla() {
         kaannyOikealle(); 
         boolean palaute = !this.voiEdeta();
