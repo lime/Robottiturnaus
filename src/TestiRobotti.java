@@ -95,12 +95,12 @@ public class TestiRobotti extends Robotti {
 		 */
 		int parasSuunta = Arrays.asList(this.etenemisVaihtoehdot).indexOf(1); //eka vaan joku jonne voi mennä
 		int parasSuuntaKertaa = Integer.MAX_VALUE;
-		if(historia.peekLast().equals( this.nykyinenSijainti ) ) {
-			System.err.println(">> null");
+		if( historia.peekFirst().equals(historia.peekLast()) && historia.peekLast().equals(nykyinenSijainti) ) {
+			System.out.println(historia.toString());
 		} else if(jokaSuuntaanOllaanMenty(this.nykyinenSijainti) && historia.peekLast() != null) {
     		System.out.println("#BEFORE: " + this.historia.toString());
-    		this.historia = this.optiomoiHistoriaa(); //XXX Tää tehostaisi jonkin verran jos toimii!
-    		//this.optiomoiHistoriaa();
+    		//this.historia = this.optiomoiHistoriaa(); //XXX Tää tehostaisi jonkin verran jos toimii!
+    		this.optiomoiHistoriaa();
     		System.out.println("##AFTER: " + this.historia.toString());
 
 				Point viimeSijainti = historia.peekLast();
@@ -130,7 +130,7 @@ public class TestiRobotti extends Robotti {
 	    return parasSuunta;
 	}
 	
-	public void optiomoiHistoriaa_2nd() {
+	public void optiomoiHistoriaa() {
 		int leikkauspiste=-1;
 		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
 		LinkedList<Point> reitti = new LinkedList<Point>();
@@ -158,7 +158,7 @@ public class TestiRobotti extends Robotti {
 		}
 	}
 
-	private LinkedList<Point> optiomoiHistoriaa() {
+	private LinkedList<Point> optiomoiHistoriaa_1st() {
 		LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
 		Iterator<Point> iteraattori = histamiini.descendingIterator(); //iteraattori joka menee lopusta alkuun
 		Point seuraava = iteraattori.next();
