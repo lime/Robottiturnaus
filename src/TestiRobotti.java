@@ -287,10 +287,41 @@ public class TestiRobotti extends Robotti {
 	}
     
     /*
+<<<<<<< HEAD
     
     
     
     
+=======
+public void optiomoiHistoriaa() {
+		int leikkauspiste=-1;
+    	LinkedList<Point> histamiini = new LinkedList<Point>(historia); //kopioidaan historia LinkedList:iksi
+		LinkedList<Point> reitti = new LinkedList<Point>();
+    	Iterator<Point> itr = histamiini.descendingIterator();
+		while (itr.hasNext()) {
+			Point arvo = itr.next();
+			if (naapuritPisteessa(this.nykyinenSijainti).contains(arvo)) {
+				//System.out.println("Size of histamiini: " + histamiini.size());
+				//System.out.println("Index of: " + histamiini.indexOf(arvo));
+				if (histamiini.indexOf(arvo) != (histamiini.size() - 2)) {
+					leikkauspiste = histamiini.indexOf(arvo);
+				}
+			}	
+		}
+		int x = 0;
+		System.out.println("Leikkauspiste luotu kohtaan:" + leikkauspiste);
+		if (leikkauspiste != -1) {
+			while (x <= leikkauspiste) {
+				reitti.add(x,histamiini.get(x));
+				System.out.println(x);
+				x++;
+			}
+			reitti.addLast(histamiini.getLast());
+		this.historia = new ArrayDeque<Point>(reitti);
+		}
+    }
+    */
+>>>>>>> f410daf907a09efd0bcf3002ab4b4f8e50a4d925
     /*boolean seinaOikealla() {
         kaannyOikealle(); 
         boolean palaute = !this.voiEdeta();
